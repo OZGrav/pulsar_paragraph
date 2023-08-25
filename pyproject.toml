@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "pulsar-paragraph"
+version = "0.1.0"
+description = "A python package that can create a human readable summary of a pulsar based on information for the ANTF pulsar catalogue"
+authors = ["NickSwainston <nickaswainston@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "pulsar_paragraph"}]
+include = [
+    "pulsar_paragraph/data_files/*csv",
+]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+pandas = "^2.0.3"
+
+[tool.poetry.scripts]
+pulsar_paragraph = "pulsar_paragraph.pulsar_paragraph:main"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
