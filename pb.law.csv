@@ -1,0 +1,8 @@
+0 , 0.08333333333 , extremely tight , 3 , orbital period of just , has an , hours , 24 , f
+0.08333333333 , 0.5 , very tight , 3 , orbital period of just , has a , hours , 24 , f
+0.5 , 1 , quite tight , 3 , orbital period of only , has a , hours , 24 , f
+1 , 2 , reasonably short , 3 , orbital period of , has a , days , 1 , f
+2 , 10 , fairly typical , 3 , orbital period of , has a , days , 1 , f
+10 , 50 , quite long , 3 , orbital period of , has a , days , 1 , f
+50 , 365 , very long , 3 , orbital period of , has a , days , 1 , f
+365 , 1e99 , extremely long , 3 , orbital period of , has an , years , 0.002737850787 , f

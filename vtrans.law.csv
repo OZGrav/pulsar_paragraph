@@ -1,0 +1,6 @@
+0 , 10 , extremely low , 1 , transverse velocity of , an , km/s , 1 , i
+10 , 30 , low , 1 , transverse velocity of , a , km/s , 1 , i
+30 , 100 , intermediate , 1 , transverse velocity of , an , km/s , 1 , i
+100 , 300 , high , 1 , transverse velocity of , a , km/s , 1 , i
+300 , 500 , very high , 1 , transverse velocity of , a , km/s , 1 , i
+500 , 1e99 , extremely high , 1 , transverse velocity of , an , km/s , 1 , i

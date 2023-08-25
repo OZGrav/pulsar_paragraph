@@ -1,0 +1,46 @@
+ar1 ,the 1st Arecibo Survey
+ar2 ,the 2nd Arecibo Survey
+ar3 ,the 3rd Arecibo Survey
+ar4 ,the 4th Arecibo Survey
+ar327 ,the Arecibo 327 MHz Drift-Scan Survey
+chime ,the CHIME Pulsar Survey
+fast_gpps ,the FAST GPPS Survey
+fast ,the FAST Survey
+fast_mb ,the FAST 19-beam L-Band survey
+fast_uwb ,the FAST UWB Survey
+fermi ,the Fermi unidentified gamma-ray sources searches
+FermiAssoc ,the Fermi unidentified gamma-ray sources searches
+FermiBlind ,the Fermi Gamma-ray Observatory blind survey
+gbncc ,the Green Bank North Celestial Cap survey
+gb1 ,the Green Bank Northern Hemisphere survey
+gb2 ,the Princeton-NRAO survey
+gb3 ,the Green Bank short-period survey
+gb4 ,the Green Bank fast pulsar survey
+gbt350 ,the Green Bank 350 MHz drift-scan survey
+ghrss ,the GMRT High Resolution Southern Sky Survey
+htru_c , None
+htru_eff ,the Parkes High Time Resolution Universe survey (HTRU) - Effelsberg
+htru_i , None
+htru_pks ,the Parkes High Time Resolution Universe survey (HTRU)
+jb1 ,the Jodrell A survey
+jb2 ,the Jodrell B survey
+lotaas ,the LOFAR Tied Array All-sky Survey
+mol1 ,the 1st Molonglo survey
+mol2 ,the 2nd Molonglo Survey
+meerkat_trapum ,the MeerKAT TRAPUM survey
+misc ,a minor survey
+palfa ,the Arecibo Multibeam Survey
+pksmb ,the Parkes multibeam pulsar survey
+pkshl ,the Parkes high-latitude multibeam pulsar survey
+pksngp ,the Parkes deep northern Galactic Plane survey
+pkssw ,the Parkes Swinburne intermediate latitude pulsar survey
+pks70 ,the Parkes Southern Sky survey
+pks1 ,the Parkes 20-cm survey
+pksmb ,the Parkes multibeam pulsar survey
+pamb ,the Parkes Perseus Arm multibeam survey
+phmb ,the Parkes high-latitude multibeam pulsar survey
+pksgc ,the Parkes globular cluster survey
+pkspa ,the Parkes Perseus Arm multibeam survey
+pks_superb ,the Parkes survey for pulsars and extragalactic radio bursts
+SBS_rrat ,the reprocessing of the Swinburne intermediate latitude survey
+superb ,the Parkes survey for pulsars and extragalactic radio bursts

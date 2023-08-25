@@ -1,0 +1,8 @@
+0 , 1.00E-06 , extremely circular , 3 , orbit with an eccentricity of , an ,  , 1 , E
+1.00E-06 , 1.00E-05 , very circular , 3 , orbit with an eccentricity of , a ,  , 1, E
+1.00E-05 , 1.00E-04 , very mildly eccentric , 3 , orbit with an eccentricity of , a ,  , 1, E
+0.0001 , 0.01 , mildly eccentric , 3 , orbit with an eccentricity of , a ,  , 1 , E
+0.01 , 0.1 , reasonably eccentric , 3 , orbit with an eccentricity of , a ,  , 1 , f
+0.1 , 0.4 , eccentric , 3 , orbit with an eccentricity of , an ,  , 1 , f
+0.4 , 0.8 , highly eccentric , 3 , orbit with an eccentricity of , a ,  , 1 , f
+0.8 , 1 , extremely eccentric , 3 , orbit with an eccentricity of , an ,  , 1 , f
