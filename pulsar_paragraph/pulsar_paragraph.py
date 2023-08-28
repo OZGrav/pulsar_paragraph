@@ -68,6 +68,7 @@ def create_pulsar_paragraph(
         pulsar_names=None,
         query=None,
         pulsar_paragraph=None,
+        include_links=False,
     ):
     """Create a paragraph for each pulsar in pulsar_names."""
 
@@ -108,7 +109,7 @@ def create_pulsar_paragraph(
             bname_str = ''
         else:
             bname_str = f" ({row['PSRB']})"
-        if row['PSRJ'] in psrs_available:
+        if row['PSRJ'] in psrs_available and include_links:
             period_str = f"PSR [[https://pulsars.org.au/fold/meertime/{row['PSRJ']}|{row['PSRJ']}]]{bname_str} is {period_func_str}"
         else:
             period_str = f"PSR {row['PSRJ']}{bname_str} is {period_func_str}"
@@ -218,7 +219,10 @@ def create_pulsar_paragraph(
             if year_str == '':
                 survey_str = ''
             else:
-                survey_str = f" as part of [[https://astronomy.swin.edu.au/~mbailes/encyc/{survey_name}_plots.html|{survey_func_str}]]."
+                if include_links:
+                    survey_str = f" as part of [[https://astronomy.swin.edu.au/~mbailes/encyc/{survey_name}_plots.html|{survey_func_str}]]."
+                else:
+                    survey_str = f" as part of {survey_func_str}."
         # ORBITAL PERIOD
         if pb_func_str is None:
             pb_str = ''
@@ -359,11 +363,13 @@ def main():
 
     parser.add_argument("-p", "--pulsar_names", nargs="+", help="List of pulsar names. If none selected will process all pulsars.")
     parser.add_argument("-o", "--output_file", help="Output file name. If none supplied will print to stdout.")
+    parser.add_argument("-l", "--include_links", action="store_true", help="Include links to pulsars.org.au and astronomy.swin.edu.au in the descriptions.")
 
     args = parser.parse_args()
 
     output_paragraphs = create_pulsar_paragraph(
         pulsar_names=args.pulsar_names,
+        include_links=args.include_links,
     )
     if args.output_file:
         with open(args.output_file, 'w') as f:
