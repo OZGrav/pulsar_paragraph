@@ -1,4 +1,4 @@
-
+import numpy as np
 
 
 
@@ -145,6 +145,8 @@ class PulsarParagraph:
         """Function that reads in p1 directly from file and output a string. Has 3 outcomes depending if p1 is +, -, or 0.
         """
         if '*' in str(p1):
+            return f' PSR {psr_name} has no measured period derivative.'
+        elif np.isnan(p1):
             return f' PSR {psr_name} has no measured period derivative.'
         else:
             p1 = float(p1)
