@@ -4,6 +4,7 @@
 import psrqpy
 import numpy as np
 import pandas as pd
+import argparse
 
 from pulsar_paragraph.load_data import get_data_path
 from pulsar_paragraph.pulsar_classes import PulsarParagraph
@@ -63,21 +64,27 @@ SURVEY_CODES = {
 }
 
 
+def create_pulsar_paragraph(
+        pulsar_names=None,
+        output_filename=None,
+        query=None,
+        pulsar_paragraph=None,
+    ):
+    """Create a paragraph for each pulsar in pulsar_names."""
 
-def main():
+    if query is None:
+        if pulsar_names is None:
+            query = psrqpy.QueryATNF().pandas
+        else:
+            query = psrqpy.QueryATNF(psrs=list(pulsar_names)).pandas
+
+    if pulsar_paragraph is None:
+        pulsar_paragraph = PulsarParagraph()
+
     pulsars_available = pd.read_csv(get_data_path('pulsars-links_available.csv'), header=None, sep=",", engine='python')
     psrs_available = list(pulsars_available.iloc[:, 0])
-    txt_file = open('pulsar_paragraphs.txt', 'w+')
+    txt_file = open(output_filename, 'w+')
 
-    # Main Function Loop -- Calls the functions and outputs the paragraph to a .html file.
-    # If statements check whether functions return actual data. If not, the string becomes
-    # empty, thus only printing if there is actual data to print. The if statements also help to format the output.
-    # This is when the final tweaking takes place before outputting the result.
-    # Some if statements do unique things, such as the dist if statement, which actually produces a sentence by itself.
-
-    #query = psrqpy.QueryATNF(version=ATNF_VER).pandas
-    pulsar_paragraph = PulsarParagraph()
-    query = psrqpy.QueryATNF().pandas
     for index, row in query.iterrows():
         period_func_str  = pulsar_paragraph.period.variable_value_to_str( row['P0'])
         dm_func_str      = pulsar_paragraph.dm.variable_value_to_str(     row['DM'])
@@ -348,6 +355,19 @@ def main():
         print(end_str, file = txt_file)
 
     txt_file.close()
+
+def main():
+    parser = argparse.ArgumentParser(description="Creates a human readable summary of a pulsar based on information for the ANTF pulsar catalogue.")
+
+    parser.add_argument("-p", "--pulsar_names", nargs="+", help="List of pulsar names. If none selected will process all pulsars.")
+    parser.add_argument("-o", "--output_file", default="pulsar_paragraph.txt", help="Output file name")
+
+    args = parser.parse_args()
+
+    create_pulsar_paragraph(
+        pulsar_names=args.pulsar_names,
+        output_filename=args.output_file,
+    )
 
 
 if __name__ == '__main__':
