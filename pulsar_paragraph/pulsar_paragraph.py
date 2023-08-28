@@ -6,17 +6,7 @@ import numpy as np
 import pandas as pd
 
 from pulsar_paragraph.load_data import get_data_path
-from pulsar_paragraph.default_gates import (
-    period_defaults,
-    dm_defaults,
-    s1400_defaults,
-    pb_defaults,
-    ecc_defaults,
-    age_defaults,
-    bsurf_defaults,
-    vtrans_defaults,
-    minmass_defaults,
-)
+from pulsar_paragraph.pulsar_classes import PulsarParagraph
 
 
 SURVEY_CODES = {
@@ -72,253 +62,6 @@ SURVEY_CODES = {
     "tulipp": "the LOFAR Targetted Search for Polarized Pulsars",
 }
 
-class PulsarParagraph:
-    def __init__(self, load_defaults=True):
-        self.period = []
-        self.period_decimal_places = 2
-
-        self.dm = []
-        self.dm_decimal_places = 3
-
-        self.s1400 = []
-        self.s1400_decimal_places = 3
-
-        self.pb = []
-        self.pb_decimal_places = 3
-
-        self.ecc = []
-        self.ecc_decimal_places = 3
-
-        self.age = []
-        self.age_decimal_places = 3
-
-        self.bsurf = []
-        self.bsurf_decimal_places = 2
-
-        self.vtrans = []
-        self.vtrans_decimal_places = 1
-
-        self.minmass = []
-        self.minmass_decimal_places = 3
-
-        if load_defaults:
-            self.period  = period_defaults()
-            self.dm      = dm_defaults()
-            self.s1400   = s1400_defaults()
-            self.pb      = pb_defaults()
-            self.ecc     = ecc_defaults()
-            self.age     = age_defaults()
-            self.bsurf   = bsurf_defaults()
-            self.vtrans  = vtrans_defaults()
-            self.minmass = minmass_defaults()
-
-    def add_period(self, period):
-        self.period.append(period)
-
-    def display_periods(self):
-        for period in self.period:
-            period.display()
-
-    def add_dm(self, dm):
-        self.dm.append(dm)
-
-    def display_dms(self):
-        for dm in self.dm:
-            dm.display()
-
-    def add_s1400(self, s1400):
-        self.s1400.append(s1400)
-
-    def display_s1400s(self):
-        for s1400 in self.s1400:
-            s1400.display()
-
-    def add_pb(self, pb):
-        self.pb.append(pb)
-
-    def display_pbs(self):
-        for pb in self.pb:
-            pb.display()
-
-    def add_ecc(self, ecc):
-        self.ecc.append(ecc)
-
-    def display_eccs(self):
-        for ecc in self.ecc:
-            ecc.display()
-
-    def add_age(self, age):
-        self.age.append(age)
-
-    def display_ages(self):
-        for age in self.age:
-            age.display()
-
-    def add_bsurf(self, bsurf):
-        self.bsurf.append(bsurf)
-
-    def display_bsurfs(self):
-        for bsurf in self.bsurf:
-            bsurf.display()
-
-    def add_vtrans(self, vtrans):
-        self.vtrans.append(vtrans)
-
-    def display_vtranss(self):
-        for vtrans in self.vtrans:
-            vtrans.display()
-
-    def add_minmass(self, minmass):
-        self.minmass.append(minmass)
-
-    def display_minmasss(self):
-        for minmass in self.minmass:
-            minmass.display()
-
-    def variable_value_to_str(self, variable_gates, value: str) -> str:
-        if value == "*":
-            return None
-        for variable_gate in variable_gates:
-            if variable_gate.lower_bound <= float(value) < variable_gate.upper_bound:
-                return f"{variable_gate.descriptor} {value * variable_gate.factor} {variable_gate.unit}"
-
-
-    def p1_to_str(self, p1, psr_name):
-        """Function that reads in p1 directly from file and outpute a string. Has 3 outcomes depending if p1 is +, -, or 0.
-        """
-        if '*' in str(p1):
-            return f' PSR {psr_name} has no measured period derivative.'
-        else:
-            p1 = float(p1)
-            if p1 < 0:
-                p1 = '{:.2e}'.format(p1)
-                p1 = str(p1)
-                return f' This pulsar has an unusual negative period derivative of {p1}. Because it is negative, it has no estimate of magnetic field strength or characteristic age.'
-            else:
-                p1 = '{:.2e}'.format(p1)
-                p1 = str(p1)
-                return f' This pulsar has a period derivative of {p1}.'
-
-
-    def dec_law(self, dec):
-        """Law that converts dec info to str. Dec info is found in PSR name, e.g J0437-4715, as + or -.
-        Has a function because a law is not necessary. The sentence formatting is at the bottom of the file in an if statement.
-        """
-        dec = str(dec).strip()
-        if '*' in str(dec):
-            return None
-        else:
-            if '+' in dec:
-                return 'Northern Hemisphere'
-            elif '-' in dec:
-                return 'Southern Hemisphere'
-
-
-    def assoc_to_str(self, assoc: int):
-        """Converts assoc str to descriptor. Does not have a law because data-type is unique.
-        Breaks the data into lists, then converts data to str depending on data-type. Then, appended to a final str.
-        Does not work for every case, which is why there are some .replace methods at the bottom of file.
-        Final output is of truncated type, aka one/two sentence descriptor max.
-        """
-        assoc_dict = {
-            "EXGAL": "an extragalactic pulsar",
-            "SMC": " located in the Small Magellanic Cloud.",
-            "XRS": "an associated x-ray source",
-            "GRS": "an associated gamma-ray source",
-            "SNR": "a supernova remnant",
-            "GC": "located in the globular cluster",
-            "PWN": " located in the pulsar wind nebula",
-            "LMC": " located in the Large Magellanic Cloud.",
-            "OPT": "the optical counterpart",
-        }
-        assoc = str(assoc).strip()
-        assoc_str_final = ''
-        assoc_str = ''
-        assoc_str_temp = ''
-        assoc_str_temp2 = ''
-        assoc_str2 = ''
-        count = 0
-        count2 = 0
-        exgal_flag = False
-        if '*' not in assoc:
-            if ',' in assoc:
-                assoc_split = assoc.split(',')
-                for comma_split in assoc_split:
-                    count += 1
-                    if ':' in comma_split:
-                        colon_split = comma_split.split(':')
-                        for item in colon_split:
-                            item = str(item).strip()
-                            if item in assoc_dict and exgal_flag == True:
-                                assoc_str_temp += assoc_dict[item]
-                            elif item in assoc_dict and 'EXGAL' == item:
-                                assoc_str_temp = assoc_dict[item]
-                                exgal_flag = True
-                            elif item in assoc_dict:
-                                if count < len(assoc_split) and count != 1:
-                                    assoc_str_temp += ' and '
-                                if 'with' in assoc_str_temp or 'and' in assoc_str_temp:
-                                    assoc_str_temp = assoc_dict[item]
-                                else:
-                                    assoc_str_temp += assoc_dict[item]
-                            elif item not in assoc_dict and '[' in item and len(item) > 9:
-                                bracket = item.index('[')
-                                new_item = item[:bracket]
-                                assoc_str_temp += ' ' + '(' + str(new_item) + ')'
-                                if count < len(assoc_split)-1:
-                                    assoc_str_temp += ', '
-                                elif count < len(assoc_split):
-                                    assoc_str_temp += ' and '
-                                else:
-                                    assoc_str_temp += '.'
-                            elif item not in assoc_dict and '[' in item:
-                                assoc_str_temp = assoc_str_temp.replace('the', 'an')
-                                if count < len(assoc_split)-1:
-                                    assoc_str_temp += ', '
-                                elif count < len(assoc_split):
-                                    assoc_str_temp += ' and '
-                                else:
-                                    assoc_str_temp += '.'
-                            elif item not in assoc_dict:
-                                if count < len(colon_split):
-                                    assoc_str_temp += ' with'
-                                assoc_str_temp += ' ' + '(' + str(item) + ')'
-                                if count == len(assoc_split):
-                                    assoc_str_temp += '.'
-                            assoc_str = assoc_str_temp
-                    assoc_str_final += assoc_str
-            elif ':' in assoc:
-                colon_split2 = assoc.split(':')
-                for item in colon_split2:
-                    count2 += 1
-                    item = str(item).strip()
-                    if item in assoc_dict and exgal_flag == True:
-                        assoc_str_temp2 += assoc_dict[item]
-                    elif item in assoc_dict and 'EXGAL' == item:
-                        assoc_str_temp2 = assoc_dict[item]
-                        exgal_flag = True
-                    elif item in assoc_dict:
-                        assoc_str_temp2 = ' and has ' + assoc_dict[item]
-                    elif item not in assoc_dict and '[' in item and len(item) > 9:
-                        bracket = item.index('[')
-                        new_item = item[:bracket]
-                        assoc_str_temp2 += ' ' + '(' + str(new_item) + ')'
-                        if count2 < len(colon_split2):
-                            assoc_str_temp2 += ' and has '
-                        else:
-                            assoc_str_temp2 += '. '
-                    elif item not in assoc_dict and '[' in item:
-                        assoc_str_temp2 = assoc_str_temp2.replace('the', 'an')
-                    elif item not in assoc_dict:
-                        assoc_str_temp2 += ' ' + str(item)
-                        if count2 < len(colon_split2):
-                            assoc_str_temp2 += 'and has '
-                        else:
-                            assoc_str_temp2 += '. '
-                assoc_str2 = assoc_str_temp2
-            assoc_str_final += assoc_str2
-            return assoc_str_final
-
 
 
 def main():
@@ -336,15 +79,15 @@ def main():
     pulsar_paragraph = PulsarParagraph()
     query = psrqpy.QueryATNF().pandas
     for index, row in query.iterrows():
-        period_func_str  = pulsar_paragraph.variable_value_to_str(pulsar_paragraph.period,  row['P0'])
-        dm_func_str      = pulsar_paragraph.variable_value_to_str(pulsar_paragraph.dm,      row['DM'])
-        age_func_str     = pulsar_paragraph.variable_value_to_str(pulsar_paragraph.age,     row['AGE'])
-        bsurf_func_str   = pulsar_paragraph.variable_value_to_str(pulsar_paragraph.bsurf,   row['BSURF'])
-        pb_func_str      = pulsar_paragraph.variable_value_to_str(pulsar_paragraph.pb,      row['PB'])
-        ecc_func_str     = pulsar_paragraph.variable_value_to_str(pulsar_paragraph.ecc,     row['ECC'])
-        minmass_func_str = pulsar_paragraph.variable_value_to_str(pulsar_paragraph.minmass, row['MINMASS'])
-        s1400_func_str   = pulsar_paragraph.variable_value_to_str(pulsar_paragraph.s1400,   row['S1400'])
-        vtrans_func_str  = pulsar_paragraph.variable_value_to_str(pulsar_paragraph.vtrans,  row['VTRANS'])
+        period_func_str  = pulsar_paragraph.period.variable_value_to_str( row['P0'])
+        dm_func_str      = pulsar_paragraph.dm.variable_value_to_str(     row['DM'])
+        age_func_str     = pulsar_paragraph.age.variable_value_to_str(    row['AGE'])
+        bsurf_func_str   = pulsar_paragraph.bsurf.variable_value_to_str(  row['BSURF'])
+        pb_func_str      = pulsar_paragraph.pb.variable_value_to_str(     row['PB'])
+        ecc_func_str     = pulsar_paragraph.ecc.variable_value_to_str(    row['ECC'])
+        minmass_func_str = pulsar_paragraph.minmass.variable_value_to_str(row['MINMASS'])
+        s1400_func_str   = pulsar_paragraph.s1400.variable_value_to_str(  row['S1400'])
+        vtrans_func_str  = pulsar_paragraph.vtrans.variable_value_to_str( row['VTRANS'])
         dec_func_str     = pulsar_paragraph.dec_law(row['DECJ'])
         p1_func_str      = pulsar_paragraph.p1_to_str(row['P1'], row['PSRJ'])
         assoc_func_str   = pulsar_paragraph.assoc_to_str(row['ASSOC'])
@@ -459,9 +202,9 @@ def main():
                 dist = 8.5
             dist = int(float(dist) * 1000)
             if float(dist) < 15000:
-                dist_str = f" The estimated distance to {row['PSRJ']} is {dist} pc. "
+                dist_str = f" The estimated distance to {row['PSRJ']} is {dist} pc."
             else:
-                dist_str = f" The YMD distance model suggests that the distance to {row['PSRJ']} is {dist} pc, but that is suspicious. "
+                dist_str = f" The YMD distance model suggests that the distance to {row['PSRJ']} is {dist} pc, but that is suspicious."
         # SURVEY
         if survey_func_str is None:
             survey_str = ''
@@ -491,7 +234,7 @@ def main():
             age_str = ''
         else:
             if 'PSR' in pb_str:
-                age_temp_str = ' It '
+                age_temp_str = ' It'
             else:
                 age_temp_str = f" PSR {row['PSRJ']}"
             age_str = f"{age_temp_str} is {age_func_str}."
@@ -520,11 +263,11 @@ def main():
         dec_flag = False
         if dec_func_str is not None or '' == dec_func_str:
             if s1400_str != '':
-                dec_temp_str = ' PSR ' + row['PSRJ']
+                dec_temp_str = f" PSR {row['PSRJ']} "
             else:
                 dec_temp_str = ' It '
             if 'extragalactic' in assoc_str or assoc_str == '':
-                dec_str = dec_temp_str + 'is a ' + dec_func_str + ' pulsar. '
+                dec_str = dec_temp_str + 'is a ' + dec_func_str + ' pulsar.'
                 dec_flag = True
             elif '47Tuc' in assoc_str or 'and has' in assoc_str:
                 dec_str = dec_temp_str + 'is a ' + dec_func_str + ' pulsar '
