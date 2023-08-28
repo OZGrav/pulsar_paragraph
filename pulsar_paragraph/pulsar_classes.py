@@ -84,6 +84,9 @@ class PulsarVariable:
     def variable_value_to_str(self,  value: str) -> str:
         if value == "*":
             return None
+        if self.name == "s1400":
+            # Convert value from mJy to Jy so metric prefixes are handled correctly
+            value = float(value) / 1000.0
         for variable_gate in self.gates:
             if variable_gate.lower_bound <= float(value) < variable_gate.upper_bound:
                 # Convert to metric prefix units (e.g. G then divide by 1e9)
@@ -623,56 +626,64 @@ def gate_default(variable_name):
             VariableGate(
                 name="s1400",
                 lower_bound=0.0,
-                upper_bound=0.1,
+                upper_bound=1e-6,
+                descriptor="an extremely faint pulsar with a 1400 MHz catalogue flux density of",
+                metric_prefix="μ",
+            ),
+            # Redundant description to output the correct metric_prefix
+            VariableGate(
+                name="s1400",
+                lower_bound=1e-6,
+                upper_bound=1e-4,
                 descriptor="an extremely faint pulsar with a 1400 MHz catalogue flux density of",
                 metric_prefix="μ",
             ),
             VariableGate(
                 name="s1400",
-                lower_bound=0.1,
-                upper_bound=0.5,
+                lower_bound=1e-4,
+                upper_bound=5e-4,
                 descriptor="a faint pulsar with a 1400 MHz catalogue flux density of",
                 metric_prefix="m",
             ),
             VariableGate(
                 name="s1400",
-                lower_bound=0.5,
-                upper_bound=1.0,
+                lower_bound=5e-4,
+                upper_bound=1e-3,
                 descriptor="a weak pulsar with a 1400 MHz catalogue flux density of",
                 metric_prefix="m",
             ),
             VariableGate(
                 name="s1400",
-                lower_bound=1.0,
-                upper_bound=5.0,
+                lower_bound=1e-3,
+                upper_bound=5e-3,
                 descriptor="a moderately bright pulsar with a 1400 MHz catalogue flux density of",
                 metric_prefix="m",
             ),
             VariableGate(
                 name="s1400",
-                lower_bound=5.0,
-                upper_bound=20.0,
+                lower_bound=5e-3,
+                upper_bound=2e-2,
                 descriptor="a fairly bright pulsar with a 1400 MHz catalogue flux density of",
                 metric_prefix="m",
             ),
             VariableGate(
                 name="s1400",
-                lower_bound=20.0,
-                upper_bound=100.0,
+                lower_bound=2e-2,
+                upper_bound=0.1,
                 descriptor="a bright pulsar with a 1400 MHz catalogue flux density of",
                 metric_prefix="m",
             ),
             VariableGate(
                 name="s1400",
-                lower_bound=100.0,
-                upper_bound=500.0,
+                lower_bound=0.1,
+                upper_bound=0.5,
                 descriptor="a very bright pulsar with a 1400 MHz catalogue flux density of",
                 metric_prefix="m",
             ),
             VariableGate(
                 name="s1400",
-                lower_bound=500.0,
-                upper_bound=100000.0,
+                lower_bound=0.5,
+                upper_bound=1e99,
                 descriptor="an extremely bright pulsar with a 1400 MHz catalogue flux density of",
             ),
         ],
