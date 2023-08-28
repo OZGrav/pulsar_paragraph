@@ -1,9 +1,0 @@
-1e-3 , 2e-3 , very fast millisecond pulsar , 2 , with a period of , a , milliseconds , 1000 , f
-2e-3 , 8e-3 , millisecond pulsar , 2 , with a period of , a , milliseconds , 1000 , f
-8e-3 , 20e-3 , relatively slow millisecond pulsar , 2 , with a period of , a , milliseconds , 1000 , f
-20e-3 , 100e-3 , quite fast pulsar , 2 , with a period of , a , milliseconds , 1000 , f
-100e-3 , 999e-3 , normal pulsar , 2 , with a period of , a , milliseconds , 1000 , f
-1 , 2 , normal pulsar , 2 , with a period of , a , seconds , 1 , f
-2 , 5 , fairly slow pulsar , 2 , with a period of , a , seconds , 1 , f
-5 , 10 , very slow pulsar , 2 , with a period of , a , seconds , 1 , f
-10 , 10000 , extremely slow pulsar , 2 , with a period of , an , seconds , 1 , f
