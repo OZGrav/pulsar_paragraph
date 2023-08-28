@@ -66,7 +66,6 @@ SURVEY_CODES = {
 
 def create_pulsar_paragraph(
         pulsar_names=None,
-        output_filename=None,
         query=None,
         pulsar_paragraph=None,
     ):
@@ -83,8 +82,8 @@ def create_pulsar_paragraph(
 
     pulsars_available = pd.read_csv(get_data_path('pulsars-links_available.csv'), header=None, sep=",", engine='python')
     psrs_available = list(pulsars_available.iloc[:, 0])
-    txt_file = open(output_filename, 'w+')
 
+    output_paragraphs = []
     for index, row in query.iterrows():
         period_func_str  = pulsar_paragraph.period.variable_value_to_str( row['P0'])
         dm_func_str      = pulsar_paragraph.dm.variable_value_to_str(     row['DM'])
@@ -352,22 +351,27 @@ def create_pulsar_paragraph(
             end_str = end_str.replace(' and an associated gamma-ray source (1AGL_J)', '')
         if 'It is an associated gamma-ray source' in end_str:
             end_str = end_str.replace('It is an associated gamma-ray source', 'It has an associated gamma-ray source')
-        print(end_str, file = txt_file)
-
-    txt_file.close()
+        output_paragraphs.append(end_str)
+    return output_paragraphs
 
 def main():
     parser = argparse.ArgumentParser(description="Creates a human readable summary of a pulsar based on information for the ANTF pulsar catalogue.")
 
     parser.add_argument("-p", "--pulsar_names", nargs="+", help="List of pulsar names. If none selected will process all pulsars.")
-    parser.add_argument("-o", "--output_file", default="pulsar_paragraph.txt", help="Output file name")
+    parser.add_argument("-o", "--output_file", help="Output file name. If none supplied will print to stdout.")
 
     args = parser.parse_args()
 
-    create_pulsar_paragraph(
+    output_paragraphs = create_pulsar_paragraph(
         pulsar_names=args.pulsar_names,
-        output_filename=args.output_file,
     )
+    if args.output_file:
+        with open(args.output_file, 'w') as f:
+            for paragraph in output_paragraphs:
+                f.write(paragraph + '\n')
+    else:
+        for paragraph in output_paragraphs:
+            print(paragraph)
 
 
 if __name__ == '__main__':
