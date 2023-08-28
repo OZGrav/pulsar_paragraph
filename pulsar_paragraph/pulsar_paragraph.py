@@ -228,15 +228,15 @@ def create_pulsar_paragraph(
             pb_str = ''
         else:
             if ecc_func_str is None:
-                pb_str = f" PSR {row['PSRJ']}{pb_func_str}."
+                pb_str = f" PSR {row['PSRJ']} {pb_func_str}."
             else:
-                pb_str = f" PSR {row['PSRJ']}{pb_func_str}"
+                pb_str = f" PSR {row['PSRJ']} {pb_func_str}"
         # ECCENTRICITY
         if ecc_func_str is None:
             ecc_str = ''
         else:
             if pb_str == '':
-                ecc_str = f" PSR {row['PSRJ']}{ecc_func_str}."
+                ecc_str = f" PSR {row['PSRJ']} {ecc_func_str}."
             else:
                 ecc_str = f" and {ecc_func_str}."
         # AGE

@@ -88,7 +88,12 @@ class PulsarVariable:
             if variable_gate.lower_bound <= float(value) < variable_gate.upper_bound:
                 # Convert to metric prefix units (e.g. G then divide by 1e9)
                 converted_value = float(value) / get_conversion_factor(variable_gate.metric_prefix)
-                return f"{variable_gate.descriptor} { format_float(converted_value, decimal_places=self.decimal_places) } {variable_gate.metric_prefix}{self.unit}"
+                output_str = f"{variable_gate.descriptor} { format_float(converted_value, decimal_places=self.decimal_places) }"
+                if f"{variable_gate.metric_prefix}{self.unit}" == "":
+                    # No unit so return without a dangling space
+                    return output_str
+                else:
+                    return f"{output_str} {variable_gate.metric_prefix}{self.unit}"
 
 
 
@@ -117,7 +122,7 @@ class PulsarParagraph:
         self.ecc = PulsarVariable(
             name="ecc",
             unit="",
-            decimal_places=3,
+            decimal_places=5,
         )
         self.age = PulsarVariable(
             name="age",
