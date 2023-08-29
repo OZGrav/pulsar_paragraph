@@ -161,7 +161,7 @@ class PulsarParagraph:
             if p1 < 0:
                 p1 = '{:.2e}'.format(p1)
                 p1 = str(p1)
-                return f' This pulsar has an unusual negative period derivative of {p1}. Because it is negative, it has no estimate of magnetic field strength or characteristic age.'
+                return f' This pulsar has an unusual negative period derivative of {p1}. Because it is negative, it has no estimate of implied magnetic field strength or characteristic age.'
             else:
                 p1 = '{:.2e}'.format(p1)
                 p1 = str(p1)
@@ -295,47 +295,47 @@ def gate_default(variable_name):
                 name="age",
                 lower_bound=0.0,
                 upper_bound=1000.0,
-                descriptor="an extremely young pulsar with an age of",
+                descriptor="an extremely young pulsar with an estimated age of",
             ),
             VariableGate(
                 name="age",
                 lower_bound=1000.0,
                 upper_bound=2e4,
-                descriptor="a fairly young pulsar with an age of",
+                descriptor="a fairly young pulsar with an estimated age of",
             ),
             VariableGate(
                 name="age",
                 lower_bound=2e4,
                 upper_bound=1e5,
-                descriptor="a youthful pulsar with an age of",
+                descriptor="a youthful pulsar with an estimated age of",
                 metric_prefix="k",
             ),
             VariableGate(
                 name="age",
                 lower_bound=1e5,
                 upper_bound=1e6,
-                descriptor="a middle-aged pulsar with an age of",
+                descriptor="a middle-aged pulsar with an estimated age of",
                 metric_prefix="M",
             ),
             VariableGate(
                 name="age",
                 lower_bound=1e6,
                 upper_bound=1e7,
-                descriptor="a fairly old pulsar with an age of",
+                descriptor="a fairly old pulsar with an estimated age of",
                 metric_prefix="M",
             ),
             VariableGate(
                 name="age",
                 lower_bound=1e7,
                 upper_bound=1e9,
-                descriptor="a very old pulsar with an age of",
+                descriptor="a very old pulsar with an estimated age of",
                 metric_prefix="G",
             ),
             VariableGate(
                 name="age",
                 lower_bound=1e9,
                 upper_bound=1e12,
-                descriptor="an ancient pulsar with an age of",
+                descriptor="an ancient pulsar with an estimated age of",
                 metric_prefix="G",
             ),
         ],
@@ -344,31 +344,31 @@ def gate_default(variable_name):
                 name="bsurf",
                 lower_bound=0.0,
                 upper_bound=1e8,
-                descriptor="an extremely low magnetic field strength of",
+                descriptor="an extremely low implied magnetic field strength of",
             ),
             VariableGate(
                 name="bsurf",
                 lower_bound=1e8,
                 upper_bound=1e9,
-                descriptor="a low magnetic field strength of",
+                descriptor="a low implied magnetic field strength of",
             ),
             VariableGate(
                 name="bsurf",
                 lower_bound=1e9,
                 upper_bound=1e11,
-                descriptor="a moderate magnetic field strength of",
+                descriptor="a moderate implied magnetic field strength of",
             ),
             VariableGate(
                 name="bsurf",
                 lower_bound=1e11,
                 upper_bound=1e13,
-                descriptor="a typical slow pulsar-like magnetic field strength of",
+                descriptor="a typical slow pulsar-like implied magnetic field strength of",
             ),
             VariableGate(
                 name="bsurf",
                 lower_bound=1e13,
                 upper_bound=1e+99,
-                descriptor="a magnetar-like magnetic field strength of",
+                descriptor="a magnetar-like implied magnetic field strength of",
             ),
         ],
         "dm" : [
