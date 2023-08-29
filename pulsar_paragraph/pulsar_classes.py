@@ -84,6 +84,9 @@ class PulsarVariable:
     def variable_value_to_str(self,  value: str) -> str:
         if value == "*":
             return None
+        if self.name == "s1400":
+            # Convert value from mJy to Jy so metric prefixes are handled correctly
+            value = float(value) / 1000.0
         for variable_gate in self.gates:
             if variable_gate.lower_bound <= float(value) < variable_gate.upper_bound:
                 # Convert to metric prefix units (e.g. G then divide by 1e9)
@@ -158,7 +161,7 @@ class PulsarParagraph:
             if p1 < 0:
                 p1 = '{:.2e}'.format(p1)
                 p1 = str(p1)
-                return f' This pulsar has an unusual negative period derivative of {p1}. Because it is negative, it has no estimate of magnetic field strength or characteristic age.'
+                return f' This pulsar has an unusual negative period derivative of {p1}. Because it is negative, it has no estimate of implied magnetic field strength or characteristic age.'
             else:
                 p1 = '{:.2e}'.format(p1)
                 p1 = str(p1)
@@ -292,47 +295,47 @@ def gate_default(variable_name):
                 name="age",
                 lower_bound=0.0,
                 upper_bound=1000.0,
-                descriptor="an extremely young pulsar with an age of",
+                descriptor="an extremely young pulsar with an estimated age of",
             ),
             VariableGate(
                 name="age",
                 lower_bound=1000.0,
                 upper_bound=2e4,
-                descriptor="a fairly young pulsar with an age of",
+                descriptor="a fairly young pulsar with an estimated age of",
             ),
             VariableGate(
                 name="age",
                 lower_bound=2e4,
                 upper_bound=1e5,
-                descriptor="a youthful pulsar with an age of",
+                descriptor="a youthful pulsar with an estimated age of",
                 metric_prefix="k",
             ),
             VariableGate(
                 name="age",
                 lower_bound=1e5,
                 upper_bound=1e6,
-                descriptor="a middle-aged pulsar with an age of",
+                descriptor="a middle-aged pulsar with an estimated age of",
                 metric_prefix="M",
             ),
             VariableGate(
                 name="age",
                 lower_bound=1e6,
                 upper_bound=1e7,
-                descriptor="a fairly old pulsar with an age of",
+                descriptor="a fairly old pulsar with an estimated age of",
                 metric_prefix="M",
             ),
             VariableGate(
                 name="age",
                 lower_bound=1e7,
                 upper_bound=1e9,
-                descriptor="a very old pulsar with an age of",
+                descriptor="a very old pulsar with an estimated age of",
                 metric_prefix="G",
             ),
             VariableGate(
                 name="age",
                 lower_bound=1e9,
                 upper_bound=1e12,
-                descriptor="an ancient pulsar with an age of",
+                descriptor="an ancient pulsar with an estimated age of",
                 metric_prefix="G",
             ),
         ],
@@ -341,31 +344,31 @@ def gate_default(variable_name):
                 name="bsurf",
                 lower_bound=0.0,
                 upper_bound=1e8,
-                descriptor="an extremely low magnetic field strength of",
+                descriptor="an extremely low implied magnetic field strength of",
             ),
             VariableGate(
                 name="bsurf",
                 lower_bound=1e8,
                 upper_bound=1e9,
-                descriptor="a low magnetic field strength of",
+                descriptor="a low implied magnetic field strength of",
             ),
             VariableGate(
                 name="bsurf",
                 lower_bound=1e9,
                 upper_bound=1e11,
-                descriptor="a moderate magnetic field strength of",
+                descriptor="a moderate implied magnetic field strength of",
             ),
             VariableGate(
                 name="bsurf",
                 lower_bound=1e11,
                 upper_bound=1e13,
-                descriptor="a typical slow pulsar-like magnetic field strength of",
+                descriptor="a typical slow pulsar-like implied magnetic field strength of",
             ),
             VariableGate(
                 name="bsurf",
                 lower_bound=1e13,
                 upper_bound=1e+99,
-                descriptor="a magnetar-like magnetic field strength of",
+                descriptor="a magnetar-like implied magnetic field strength of",
             ),
         ],
         "dm" : [
@@ -623,56 +626,64 @@ def gate_default(variable_name):
             VariableGate(
                 name="s1400",
                 lower_bound=0.0,
-                upper_bound=0.1,
+                upper_bound=1e-6,
+                descriptor="an extremely faint pulsar with a 1400 MHz catalogue flux density of",
+                metric_prefix="μ",
+            ),
+            # Redundant description to output the correct metric_prefix
+            VariableGate(
+                name="s1400",
+                lower_bound=1e-6,
+                upper_bound=1e-4,
                 descriptor="an extremely faint pulsar with a 1400 MHz catalogue flux density of",
                 metric_prefix="μ",
             ),
             VariableGate(
                 name="s1400",
-                lower_bound=0.1,
-                upper_bound=0.5,
+                lower_bound=1e-4,
+                upper_bound=5e-4,
                 descriptor="a faint pulsar with a 1400 MHz catalogue flux density of",
                 metric_prefix="m",
             ),
             VariableGate(
                 name="s1400",
-                lower_bound=0.5,
-                upper_bound=1.0,
+                lower_bound=5e-4,
+                upper_bound=1e-3,
                 descriptor="a weak pulsar with a 1400 MHz catalogue flux density of",
                 metric_prefix="m",
             ),
             VariableGate(
                 name="s1400",
-                lower_bound=1.0,
-                upper_bound=5.0,
+                lower_bound=1e-3,
+                upper_bound=5e-3,
                 descriptor="a moderately bright pulsar with a 1400 MHz catalogue flux density of",
                 metric_prefix="m",
             ),
             VariableGate(
                 name="s1400",
-                lower_bound=5.0,
-                upper_bound=20.0,
+                lower_bound=5e-3,
+                upper_bound=2e-2,
                 descriptor="a fairly bright pulsar with a 1400 MHz catalogue flux density of",
                 metric_prefix="m",
             ),
             VariableGate(
                 name="s1400",
-                lower_bound=20.0,
-                upper_bound=100.0,
+                lower_bound=2e-2,
+                upper_bound=0.1,
                 descriptor="a bright pulsar with a 1400 MHz catalogue flux density of",
                 metric_prefix="m",
             ),
             VariableGate(
                 name="s1400",
-                lower_bound=100.0,
-                upper_bound=500.0,
+                lower_bound=0.1,
+                upper_bound=0.5,
                 descriptor="a very bright pulsar with a 1400 MHz catalogue flux density of",
                 metric_prefix="m",
             ),
             VariableGate(
                 name="s1400",
-                lower_bound=500.0,
-                upper_bound=100000.0,
+                lower_bound=0.5,
+                upper_bound=1e99,
                 descriptor="an extremely bright pulsar with a 1400 MHz catalogue flux density of",
             ),
         ],

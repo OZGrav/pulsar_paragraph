@@ -63,6 +63,49 @@ SURVEY_CODES = {
     "tulipp": "the LOFAR Targetted Search for Polarized Pulsars",
 }
 
+def is_atnf_value(value):
+    """Check if value is a valid ATNF value.
+
+    Parameters
+    ----------
+    value: str
+        The value to check.
+
+    Returns
+    -------
+    is_atnf_value: bool
+        True if value is a valid ATNF value, False otherwise.
+    """
+    if value == '*':
+        return False
+    elif np.isnan(value):
+        return False
+    else:
+        return True
+
+
+def shklovski_pdot_correction(pdot, p, dist, vtrans):
+    """Correct pdot for the Shklovski effect.
+
+    pdot: float
+        The observed pdot.
+    p: float
+        The observed period in seconds.
+    dist: float
+        The distance to the pulsar in kpc.
+    vtrans: float
+        The transverse velocity of the pulsar in km/s.
+
+    Returns
+    -------
+    pdot_corrected: float
+        The corrected pdot.
+    """
+    c = 299792458. # m/s
+    dist_m = dist * 1e3 * 3.08567758128e16 # convert kpc to m
+    vtrans_ms = vtrans * 1e3 # convert km/s to m/s
+    return pdot - p * vtrans_ms**2 / ( dist_m * c )
+
 
 def create_pulsar_paragraph(
         pulsar_names=None,
@@ -85,18 +128,29 @@ def create_pulsar_paragraph(
     psrs_available = list(pulsars_available.iloc[:, 0])
 
     output_paragraphs = []
-    for index, row in query.iterrows():
+    for _, row in query.iterrows():
+        if is_atnf_value(row['P1']) and is_atnf_value(row['P0']) and is_atnf_value(row['DIST']) and is_atnf_value(row['VTRANS']):
+            # Values available for Shklovski correction
+            pdot = shklovski_pdot_correction(row['P1'], row['P0'], row['DIST'], row['VTRANS'])
+            age = row['P0'] / ( 2 * pdot ) * 3.1688087814029e-8 # convert to years
+            bsurf = 3.2e19 * np.sqrt( row['P0'] * pdot )
+        else:
+            pdot = row['P1']
+            age = row['AGE']
+            bsurf = row['BSURF']
+
+
         period_func_str  = pulsar_paragraph.period.variable_value_to_str( row['P0'])
         dm_func_str      = pulsar_paragraph.dm.variable_value_to_str(     row['DM'])
-        age_func_str     = pulsar_paragraph.age.variable_value_to_str(    row['AGE'])
-        bsurf_func_str   = pulsar_paragraph.bsurf.variable_value_to_str(  row['BSURF'])
+        age_func_str     = pulsar_paragraph.age.variable_value_to_str(    age)
+        bsurf_func_str   = pulsar_paragraph.bsurf.variable_value_to_str(  bsurf)
         pb_func_str      = pulsar_paragraph.pb.variable_value_to_str(     row['PB'])
         ecc_func_str     = pulsar_paragraph.ecc.variable_value_to_str(    row['ECC'])
         minmass_func_str = pulsar_paragraph.minmass.variable_value_to_str(row['MINMASS'])
         s1400_func_str   = pulsar_paragraph.s1400.variable_value_to_str(  row['S1400'])
         vtrans_func_str  = pulsar_paragraph.vtrans.variable_value_to_str( row['VTRANS'])
         dec_func_str     = pulsar_paragraph.dec_law(row['DECJ'])
-        p1_func_str      = pulsar_paragraph.p1_to_str(row['P1'], row['PSRJ'])
+        p1_func_str      = pulsar_paragraph.p1_to_str(pdot, row['PSRJ'])
         assoc_func_str   = pulsar_paragraph.assoc_to_str(row['ASSOC'])
         if type(row['SURVEY']) == str:
             survey_name      = row['SURVEY'].split(',')[0]
