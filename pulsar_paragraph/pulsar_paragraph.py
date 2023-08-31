@@ -118,9 +118,11 @@ def create_pulsar_paragraph(
     if query is None:
         if pulsar_names is None:
             query = psrqpy.QueryATNF().pandas
-            pulsar_names = list(query['PSRJ'])
         else:
             query = psrqpy.QueryATNF(psrs=list(pulsar_names)).pandas
+    else:
+        # Filter our query to only include pulsars in pulsar_names
+        query = query[query['PSRJ'].isin(pulsar_names)]
 
     if pulsar_paragraph is None:
         pulsar_paragraph = PulsarParagraph()
@@ -130,9 +132,6 @@ def create_pulsar_paragraph(
 
     output_paragraphs = []
     for _, row in query.iterrows():
-        if row['PSRJ'] not in pulsar_names:
-            # Skip pulsar that may be in query but not in pulsar_names
-            continue
         if is_atnf_value(row['P1']) and is_atnf_value(row['P0']) and is_atnf_value(row['DIST']) and is_atnf_value(row['VTRANS']):
             # Values available for Shklovski correction
             pdot = shklovski_pdot_correction(row['P1'], row['P0'], row['DIST'], row['VTRANS'])
