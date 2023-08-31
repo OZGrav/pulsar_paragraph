@@ -270,6 +270,8 @@ def create_pulsar_paragraph(
                 dist_str = f" The estimated distance to {row['PSRJ']} is {dist} pc."
             else:
                 dist_str = f" The YMD distance model suggests that the distance to {row['PSRJ']} is {dist} pc, but that is suspicious."
+        else:
+            dist_str = ''
         # SURVEY
         if survey_func_str is None:
             survey_str = ''
