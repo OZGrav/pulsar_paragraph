@@ -24,7 +24,7 @@ def get_conversion_factor(metric_prefix):
 
         # The following are for converting binary period (days) into others units (hours years)
         "days"  : 1,
-        "hours" : 24,
+        "hours" : 1/24,
         "years" : 365.25,
 
     }
